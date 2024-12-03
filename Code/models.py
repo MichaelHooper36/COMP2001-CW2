@@ -10,11 +10,7 @@ from config import db, ma
 class User(db.Model):
     __tablename__ = "person"
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(32), unique=True)
-    timestamp = db.Column(
-        db.DateTime, default=lambda: datetime.now(pytz.timezone('Europe/London')),
-    onupdate=lambda: datetime.now(pytz.timezone('Europe/London'))
-    )
+    name = db.Column(db.String(63), unique=True)
     notes = db.relationship(
         "Note",
         backref="person",
