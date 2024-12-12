@@ -143,3 +143,22 @@ class TrailSchema(ma.SQLAlchemyAutoSchema):
 
 trail_schema = TrailSchema()
 trails_schema = TrailSchema(many=True)
+
+class Trail_Features(db.Model):
+    __tablename__ = "trail_features"
+    _table_args__ = {'schema': 'CW2'}
+    trail_id = db.Column(db.Integer, db.ForeignKey('CW2.trails.trail_id'), primarykey=True)
+    trail_feature_id = db.column(db.Integer, db.ForeignKey('CW2.features.trail_feature_id'), primarykey=True)
+
+    trail_id = db.relationship("Trail", backref = "trail_features")
+    trail_feature_id = db.relationship("Feature", backref = "trail_features")
+
+class TrailFeatureSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model: Trail_Features
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+trail_feat_schema = TrailFeatureSchema()
+trail_feats_schema = TrailFeatureSchema(many=True)
