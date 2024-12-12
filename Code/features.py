@@ -1,11 +1,12 @@
 # features.py
 
-from flask import abort, make_response
+from flask import abort, make_response, request
 
 from config import db
 from models import Feature, feature_schema, features_schema
 
-def create(feature):
+def create():
+    feature = request.get_json()
     trail_feature = feature.get("trail_feature")
     existing_feature = Feature.query.filter(Feature.trail_feature == trail_feature).one_or_none()
 
@@ -30,7 +31,8 @@ def read_all():
     return features_schema.dump(features)
 
 
-def update(trail_feature, feature):
+def update(trail_feature):
+    feature = request.get_json()
     existing_featue = Feature.query.filter(Feature.trail_feature == trail_feature).one_or_none()
 
     if existing_featue:

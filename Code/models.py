@@ -14,6 +14,20 @@ class User(db.Model):
     password = db.Column(db.String(63))
     role = db.Column(db.String(5))
 
+    @validates('email')
+    def validate_model(self, value):
+        import re
+        if not re.match(r"^[^@]+@[^@]+\.[^@]{2,}$", value):
+            raise ValidationError('Invalid email address format')
+        else:
+            return value
+
+    @validates('role')
+    def validate_role(self, value):
+        if value not in ['admin', 'user']:
+            raise ValidationError('Invalid role')
+        else:
+            return value
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -98,12 +112,12 @@ class Trail(db.Model):
     location_point_4 = db.Column(db.Integer, db.ForeignKey(LOCATION_ID))
     location_point_5 = db.Column(db.Integer, db.ForeignKey(LOCATION_ID))
 
-    owner_id = db.relationship("User", backref = "trails")
-    location_point_1 = db.relationship("Location", foreign_keys=[location_point_1])
-    location_point_2 = db.relationship("Location", foreign_keys=[location_point_2])
-    location_point_3 = db.relationship("Location", foreign_keys=[location_point_3])
-    location_point_4 = db.relationship("Location", foreign_keys=[location_point_4])
-    location_point_5 = db.relationship("Location", foreign_keys=[location_point_5])
+    owner = db.relationship("User", backref = "trails")
+    location_1 = db.relationship("Location", foreign_keys=[location_point_1])
+    location_2 = db.relationship("Location", foreign_keys=[location_point_2])
+    location_3 = db.relationship("Location", foreign_keys=[location_point_3])
+    location_4 = db.relationship("Location", foreign_keys=[location_point_4])
+    location_5 = db.relationship("Location", foreign_keys=[location_point_5])
 
     @validates('difficulty')
     def validate_difficulty(self, value):
@@ -147,11 +161,11 @@ trails_schema = TrailSchema(many=True)
 class Trail_Features(db.Model):
     __tablename__ = "trail_features"
     _table_args__ = {'schema': 'CW2'}
-    trail_id = db.Column(db.Integer, db.ForeignKey('CW2.trails.trail_id'), primarykey=True)
-    trail_feature_id = db.column(db.Integer, db.ForeignKey('CW2.features.trail_feature_id'), primarykey=True)
+    trail_id = db.Column(db.Integer, db.ForeignKey('CW2.trails.trail_id'), primary_key=True)
+    trail_feature_id = db.Column(db.Integer, db.ForeignKey('CW2.features.trail_feature_id'), primary_key=True)
 
-    trail_id = db.relationship("Trail", backref = "trail_features")
-    trail_feature_id = db.relationship("Feature", backref = "trail_features")
+    trail = db.relationship("Trail", backref = "trail_features")
+    trail_feature = db.relationship("Feature", backref = "trail_features")
 
 class TrailFeatureSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

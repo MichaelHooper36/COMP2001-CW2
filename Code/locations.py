@@ -5,7 +5,8 @@ from flask import abort, make_response, request
 from config import db
 from models import Location, location_schema, locations_schema
 
-def create(location):
+def create():
+    location = request.get_json()
     longitude = location.get("longitude")
     latitude = location.get("latitude")
     existing_location = Location.query.filter(Location.longitude == longitude, Location.latitude == latitude).one_or_none()
@@ -18,13 +19,13 @@ def create(location):
     else:
         abort(406, f"Location with the coordinates {longitude, latitude} already exists")
 
-def read_one(longitude, latitude):
-    location = Location.query.filter(Location.longitude == longitude, Location.latitude == latitude).one_or_none()
+def read_one(location_id):
+    location = Location.query.filter(Location.location_id == location_id).one_or_none()
 
     if location is not None:
         return location_schema.dump(location)
     else:
-        abort(404, f"Place with the coordinates {longitude, latitude} not found")
+        abort(404, f"Place with the ID {location_id} not found")
 
 def read_all():
     locations = Location.query.all()
@@ -47,12 +48,12 @@ def update(location_id):
     else:
         abort(404, f"Location with ID {location_id} not found.")
 
-def delete(longitude, latitude):
-    existing_location = Location.query.filter(Location.longitude == longitude, Location.latitude == latitude).one_or_none()
+def delete(location_id):
+    existing_location = Location.query.filter(Location.location_id == location_id).one_or_none()
 
     if existing_location:
         db.session.delete(existing_location)
         db.session.commit()
-        return make_response(f"{longitude, latitude} successfully deleted", 200)
+        return make_response(f"{location_id} successfully deleted", 200)
     else:
-        abort(404, f"Place with the coordinates {longitude, latitude} not found")
+        abort(404, f"Place with the ID {location_id} not found")

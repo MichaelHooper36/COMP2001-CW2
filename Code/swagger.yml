@@ -8,4 +8,183 @@ info:
   servers: 
    - url: '/api'
   
-  
+  components:
+    schemas:
+      Trail:
+        type: object
+        properties:
+          trail_id:
+            type: integer
+            description: 'Identifier for each individual trail'
+          trail_name: 
+            type: string
+            description: 'Name for the trails'
+            maxLength: 127
+          trail_summary:
+            type: string
+            description: 'A brief overview of the trail, including length and time to complete'
+            maxLength: 500
+          trail_description:
+            type: string
+            description: 'A description of the trail and its features'
+            maxLength: 500
+          difficulty:
+            type: string
+            enum:
+             - easy
+             - moderate
+             - hard
+            maxLength: 8
+          length:
+            type: number
+            format: float
+            description: 'How far the total trail is, measured in kilometres'
+          elevation_gain:
+            type: integer
+            description: 'The total uphill distance during the trail, measured in metres'
+          route_type:
+            type: string
+            enum:
+             - loop
+             - out and back
+             - point to point
+            maxLength: 14
+          owner_id:
+            type: integer
+            description: 'The ID of the admin that made the trail on the website'
+          location_point_1:
+            type: integer
+            description: 'The location of one point along a trail'
+          location_point_2:
+            type: integer
+            description: 'The location of one point along a trail'
+          location_point_3:
+            type: integer
+            description: 'The location of one point along a trail'
+          location_point_4:
+            type: integer
+            description: 'The location of one point along a trail'
+          location_point_5:
+            type: integer
+            description: 'The location of one point along a trail'
+      User:
+        type: object
+        properties:
+          user_id:
+            type: integer
+            description: 'Identifier for each individual user'
+          username:
+            type: string
+            description: 'The name that the users go by on the site'
+            maxLength: 63
+          email:
+            type: string
+            format: email #Informal notation
+            pattern: ^[^@]+@[^@]+\.[^@]{2,}$
+            maxLength: 63
+          password:
+            type: string
+            maxLength: 63
+          role:
+            type: string
+            enum:
+             - admin
+             - user
+      Location:
+        type: object
+        required:
+         - longitude
+         - latitude
+        properties:
+          location_id:
+            type: integer
+            description: 'Identifier for each individual location'
+          longitude:
+            type: number
+            format: float
+            description: 'How far east is the location from Prime Meridian, measured in degrees'
+            minimum: -180
+            maximum: 180
+          latitude:
+            type: number
+            format: float
+            description: 'How far north is the location from the equator, measured in degrees'
+            minimum: -90
+            maximum: 90
+          description:
+            type: string
+            minLength: 10
+            maxLength: 500
+      Feature:
+        type: object
+        properties:
+          trail_feature_id:
+            type: integer
+            description: 'Identifier for each individual feature'
+          trail_feature:
+            type: string
+            maxLength: 31
+      Trail_Features:
+        type: object
+        required:
+         - trail_id
+         - trail_feature_id
+        properties:
+          trail_id:
+            type: integer
+          trail_feature_id:
+            type: integer
+      UserAuthentication:
+        type: object
+        required:
+         - email
+         - password
+        properties:
+          email:
+            type: string
+            format: email #Informal notation
+            pattern: ^[^@]+@[^@]+\.[^@]{2,}$
+            maxLength: 63
+          password:
+            type: string
+            maxLength: 63
+    parameters:
+      trail_id:
+        name: 'trail_id'
+        in: 'path'
+        required: True
+        schema:
+          type: integer
+      user_id:
+        name: 'user_id'
+        in: 'path'
+        required: True
+        schema:
+          type: integer
+      location_id:
+        name: 'location_id'
+        in: 'path'
+        required: True
+        schema:
+          type: integer
+      trail_feature:
+        name: 'trail_feature'
+        in: 'path'
+        required: True
+        schema:
+          type: string
+
+paths:
+  /trails:
+    get:
+      operationID: 'trails.read_all'
+      tags:
+       - 'trails'
+      summary: list of all trails
+      responses:
+        '200':
+          description: Successfully retrieved all trails
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trail'
