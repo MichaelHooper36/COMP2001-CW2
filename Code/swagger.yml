@@ -181,8 +181,51 @@ paths:
       summary: list of all trails
       responses:
         '200':
-          description: Successfully retrieved all trails
+          description: Successfully retrieved all trails!
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trail'
+        '400':
+          description: Request has failed, please try again.
+    post:
+      operationId: 'trails.create'
+      tags:
+       - 'trails'
+      summary: create a new trail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trail'
+      responses:
+        '201':
+          description: Trail successfully created!
+        '400':
+          description: Request failed, please try again.
+  /trails/{trail_id}:
+    get:
+      operationId: 'trails.read_one'
+      tags:
+        - 'trails'
+      summary: View a trail using an ID
+      parameters:
+        - $ref: '#/components/parameters/trail_id'
+      responses:
+        '200':
+          description: Successful response, Trail exists
+        '404':
+          description: Trail not found
+    delete:
+      operationId: 'trails.delete'
+      tags:
+       - 'trails'
+      summary: Delete a trail using an ID
+      parameters:
+       - ref: '#/components/parameters/trail_id'
+      responses:
+        '204':
+          description: Trail successfully deleted!
+        '404':
+          description: Trail not found, please try again.
