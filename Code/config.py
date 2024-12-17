@@ -13,9 +13,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
     'mssql+pyodbc:///?odbc_connect='
     'DRIVER={ODBC Driver 17 for SQL Server};'
     'SERVER=DIST-6-505.uopnet.plymouth.ac.uk;'
-    'DATABASE=COMP2001_MHooper_new;'
-    'UID=MHooper;'
-    'PWD=PlymLogin72;'
+    'DATABASE=COMP2001_mhooper4;'
+    'UID=mhooper4;'
+    'PWD=PlymLogin16;'
     'TrustServerCertificate=Yes;'
     'Encrypt=yes;'
     )

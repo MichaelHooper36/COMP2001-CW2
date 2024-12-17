@@ -21,7 +21,7 @@ def read_one(trail_id):
         abort(404, f"Trail with the ID {trail_id} not found")
 
 def read_all():
-    trails = Trail.query.all()
+    trails = db.session.query(Trail).all()
     return trails_schema.dump(trails)
 
 
