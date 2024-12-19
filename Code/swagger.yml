@@ -89,6 +89,19 @@ components:
           enum:
             - admin
             - user
+    UserAuthentication:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email #Informal notation
+          maxLength: 63
+        password:
+          type: string
+          maxLength: 63
     Location:
       type: object
       required:
@@ -223,9 +236,343 @@ paths:
        - 'trails'
       summary: Delete a trail using an ID
       parameters:
-       - ref: '#/components/parameters/trail_id'
+       - $ref: '#/components/parameters/trail_id'
       responses:
         '204':
           description: Trail successfully deleted!
         '404':
           description: Trail not found, please try again.
+    patch:
+      operationId: 'trails.update'
+      tags:
+       - 'trails'
+      summary: Update a trail using an ID
+      parameters:
+       - $ref: '#/components/parameters/trail_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trail'
+      responses:
+        '200':
+          description: Trail successfully updated!
+        '404':
+          description: Trail not found, please try again.
+  /users:
+    get:
+      operationId: 'users.read_all'
+      tags:
+        - 'users'
+      summary: list of all users
+      responses:
+        '200':
+          description: Successfully retrieved all users!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Request has failed, please try again.
+    post:
+      operationId: 'users.create'
+      tags:
+       - 'users'
+      summary: create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User successfully created!
+        '400':
+          description: Request failed, please try again.
+  /users/{user_id}:
+    get:
+      operationId: 'users.read_one'
+      tags:
+        - 'users'
+      summary: View a user using an ID
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      responses:
+        '200':
+          description: Successful response, User exists
+        '404':
+          description: User not found
+    delete:
+      operationId: 'users.delete'
+      tags:
+       - 'users'
+      summary: Delete a user using an ID
+      parameters:
+       - $ref: '#/components/parameters/user_id'
+      responses:
+        '204':
+          description: User successfully deleted!
+        '404':
+          description: User not found, please try again.
+    patch:
+      operationId: 'users.update'
+      tags:
+       - 'users'
+      summary: Update a user using an ID
+      parameters:
+       - $ref: '#/components/parameters/user_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User successfully updated!
+        '404':
+          description: User not found, please try again.
+  /authenticate:
+    post:
+      operationId: 'users.authenication'
+      tags:
+       - 'users'
+      summary: authenticate a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthentication'
+      responses:
+        '200':
+          description: User successfully authenticated!
+        '400':
+          description: Request failed, please try again.
+  /locations:
+    get:
+      operationId: 'locations.read_all'
+      tags:
+        - 'locations'
+      summary: list of all locations
+      responses:
+        '200':
+          description: Successfully retrieved all locations!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '400':
+          description: Request has failed, please try again.
+    post:
+      operationId: 'locations.create'
+      tags:
+       - 'locations'
+      summary: create a new location
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: Location successfully created!
+        '400':
+          description: Request failed, please try again.
+  /locations/{location_id}:
+    get:
+      operationId: 'locations.read_one'
+      tags:
+        - 'locations'
+      summary: View a location using an ID
+      parameters:
+        - $ref: '#/components/parameters/location_id'
+      responses:
+        '200':
+          description: Successful response, Location exists
+        '404':
+          description: Location not found
+    delete:
+      operationId: 'locations.delete'
+      tags:
+       - 'locations'
+      summary: Delete a location using an ID
+      parameters:
+       - $ref: '#/components/parameters/location_id'
+      responses:
+        '204':
+          description: Location successfully deleted!
+        '404':
+          description: Location not found, please try again.
+    patch:
+      operationId: 'locations.update'
+      tags:
+       - 'locations'
+      summary: Update a location using an ID
+      parameters:
+       - $ref: '#/components/parameters/location_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '200':
+          description: Location successfully updated!
+        '404':
+          description: Location not found, please try again.
+  /features:
+    get:
+      operationId: 'features.read_all'
+      tags:
+        - 'features'
+      summary: list of all features
+      responses:
+        '200':
+          description: Successfully retrieved all features!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '400':
+          description: Request has failed, please try again.
+    post:
+      operationId: 'features.create'
+      tags:
+       - 'features'
+      summary: create a new feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feature'
+      responses:
+        '201':
+          description: Feature successfully created!
+        '400':
+          description: Request failed, please try again.
+  /features/{trail_feature}:
+    get:
+      operationId: 'features.read_one'
+      tags:
+        - 'features'
+      summary: View a feature using an ID
+      parameters:
+        - $ref: '#/components/parameters/trail_feature'
+      responses:
+        '200':
+          description: Successful response, Feature exists
+        '404':
+          description: Feature not found
+    delete:
+      operationId: 'features.delete'
+      tags:
+       - 'features'
+      summary: Delete a feature using an ID
+      parameters:
+       - $ref: '#/components/parameters/trail_feature'
+      responses:
+        '204':
+          description: Feature successfully deleted!
+        '404':
+          description: Feature not found, please try again.
+    patch:
+      operationId: 'features.update'
+      tags:
+       - 'features'
+      summary: Update a feature using an ID
+      parameters:
+       - $ref: '#/components/parameters/trail_feature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feature'
+      responses:
+        '200':
+          description: Feature successfully updated!
+        '404':
+          description: Feature not found, please try again.
+  /trail_features:
+    get:
+      operationId: 'trail_features.read_all'
+      tags:
+        - 'trail_features'
+      summary: list of all trail features
+      responses:
+        '200':
+          description: Successfully retrieved all trail features!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trail_Features'
+        '400':
+          description: Request has failed, please try again.
+    post:
+      operationId: 'trail_features.create'
+      tags:
+       - 'trail_features'
+      summary: create a new trail feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trail_Features'
+      responses:
+        '201':
+          description: Trail feature successfully created!
+        '400':
+          description: Request failed, please try again.
+  /trail_features/{trail_id}:
+    get:
+      operationId: 'trail_features.read_one'
+      tags:
+        - 'trail_features'
+      summary: Retrieve all features tied to a trail or all trails tied to a feature
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'The ID of either the trail or feature, depending on the request type'
+          required: true
+          schema:
+            type: string
+        - name: 'type'
+          in: 'query'
+          description: 'Specify whether to fetch features tied to a trail or trails tied to a feature.'
+          required: true
+          schema:
+            type: string
+            enum:
+              - trail
+              - trail_feature
+      responses:
+        '200':
+          description: Successfully retrieved data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trail_Features'
+        '400':
+          description: Request failed, please retry.
+    delete:
+      operationId: 'trail_features.delete'
+      tags:
+       - 'trail_features'
+      summary: Delete a trail feature using an ID
+      parameters:
+       - $ref: '#/components/parameters/trail_id'
+      responses:
+        '204':
+          description: Trail feature successfully deleted!
+        '404':
+          description: Trail feature not found, please try again.
+  

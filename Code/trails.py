@@ -4,6 +4,7 @@ from flask import abort, make_response, request
 
 from config import db
 from models import Trail, trail_schema, trails_schema
+from models import Trail_Features
 
 def create():
     trail_data = request.get_json()
@@ -66,8 +67,11 @@ def update(trail_id):
 
 def delete(trail_id):
     existing_trail = Trail.query.filter(Trail.trail_id == trail_id).one_or_none()
+    existing_trail_features = Trail_Features.query.filter(Trail_Features.trail_id == trail_id).all()
 
     if existing_trail:
+        for trail_feature in existing_trail_features:
+            db.session.delete(trail_feature)
         db.session.delete(existing_trail)
         db.session.commit()
         return make_response(f"{existing_trail.trail_name} successfully deleted", 200)

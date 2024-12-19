@@ -156,19 +156,16 @@ class TrailSchema(ma.SQLAlchemyAutoSchema):
     difficulty = fields.Str()
     elevation_gain = fields.Integer(missing=None)  
     route_type = fields.Str()  
-    owner_id = fields.Str(required=True)
-    location_point_1 = fields.Str()
-    location_point_2 = fields.Str()
-    location_point_3 = fields.Str()
-    location_point_4 = fields.Str()
-    location_point_5 = fields.Str()
+    owner_id = fields.Integer(required=True)
+    location_point_1 = fields.Integer()
+    location_point_2 = fields.Integer()
+    location_point_3 = fields.Integer()
+    location_point_4 = fields.Integer()
+    location_point_5 = fields.Integer()
     class Meta:
         model = Trail
         load_instance = True
         sqla_session = db.session
-
-trail_schema = TrailSchema()
-trails_schema = TrailSchema(many=True)
 
 trail_schema = TrailSchema()
 trails_schema = TrailSchema(many=True)
