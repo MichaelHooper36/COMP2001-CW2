@@ -60,7 +60,7 @@ def update(trail_id):
         if 'location_point_5' in trail_data:
             existing_trail.location_point_5 = trail_data['location_point_5']
         
-        db.commit()
+        db.session.commit()
         return make_response(f"Trail with name {existing_trail.trail_name} has been updated successfully.", 200)
     else:
         abort(404, f"Trail with ID {trail_id} not found.")
